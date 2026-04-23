@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    {"source": "/williamstownps/athletics", "destination": "/williamstownps/athletics.html"},
+    {"source": "/williamstownps/swimming", "destination": "/williamstownps/swimming.html"},
+    {"source": "/williamstownps/crosscountry", "destination": "/williamstownps/crosscountry.html"}
+  ]
+}

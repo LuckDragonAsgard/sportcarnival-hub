@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SportCarnival – School Carnival Management Made Simple</title>
+  <meta name="description" content="The easiest way to run school athletics, swimming and cross country carnivals. Manage entries, draw heats, record results and track house points – all in one place." />
+  <style>
+    :root {
+      --navy:   #0d1b3e;
+      --blue:   #1a56db;
+      --sky:    #3b82f6;
+      --teal:   #0ea5e9;
+      --green:  #16a34a;
+      --yellow: #f59e0b;
+      --red:    #ef4444;
+      --light:  #f8fafc;
+      --mid:    #f1f5f9;
+      --border: #e2e8f0;
+      --text:   #1e293b;
+      --muted:  #64748b;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text); background: #fff; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--navy);
+      color: rgba(255,255,255,.65);
+      font-size: .78rem;
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .topbar a { color: rgba(255,255,255,.8); transition: color .15s; }
+    .topbar a:hover { color: #fff; }
+    .topbar-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .topbar-sep { opacity: .3; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--navy);
+    }
+    .nav-logo .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+    }
+    .nav-links { display: flex; gap: 4px; align-items: center; }
+    .nav-links a {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: all .15s;
+    }
+    .nav-links a:hover { background: var(--mid); color: var(--text); }
+    .nav-cta {
+      background: var(--blue);
+      color: white !important;
+      padding: 9px 20px !important;
+      border-radius: 8px !important;
+      font-weight: 600 !important;
+      transition: background .15s !important;
+    }
+    .nav-cta:hover { background: #1648c0 !important; }
+    @media (max-width: 680px) { .nav-links { display: none; } }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, var(--navy) 0%, #1a2f6e 55%, #0d3b7a 100%);
+      color: white;
+      padding: 90px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(59,130,246,.2) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(14,165,233,.15) 0%, transparent 50%);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .5px;
+      margin-bottom: 24px;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -.02em;
+    }
+    .hero h1 .highlight {
+      background: linear-gradient(90deg, #60a5fa, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      opacity: .8;
+      max-width: 580px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--blue);
+      color: white;
+      padding: 14px 30px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary:hover { background: #1648c0; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(26,86,219,.4); }
+    .btn-secondary {
+      background: rgba(255,255,255,.12);
+      color: white;
+      padding: 14px 30px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,.25);
+      cursor: pointer;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,.2); }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 60px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .num { font-size: 2rem; font-weight: 900; }
+    .hero-stat .lbl { font-size: .8rem; opacity: .6; margin-top: 2px; letter-spacing: .5px; text-transform: uppercase; }
+
+    /* ── SECTIONS ── */
+    .section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-bg { background: var(--mid); }
+    .section-bg > .section { }
+    .section-full { padding: 80px 24px; }
+    .section-label {
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .section h2 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -.02em;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.65;
+      margin-bottom: 48px;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .step {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 24px;
+      border: 1px solid var(--border);
+      position: relative;
+      transition: box-shadow .2s;
+    }
+    .step:hover { box-shadow: 0 8px 28px rgba(0,0,0,.08); }
+    .step-num {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: .95rem;
+      margin-bottom: 16px;
+    }
+    .step h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+    .step p { font-size: .9rem; color: var(--muted); line-height: 1.6; }
+    .step-arrow {
+      position: absolute;
+      right: -14px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--border);
+      font-size: 1.4rem;
+      z-index: 1;
+    }
+    @media (max-width: 700px) { .step-arrow { display: none; } }
+
+    /* ── CARNIVAL TYPES ── */
+    .carnival-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .carnival-card {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .carnival-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,.1); }
+    .carnival-card-header {
+      padding: 28px 28px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .carnival-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .carnival-card-header h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
+    .carnival-card-header p { font-size: .88rem; color: var(--muted); line-height: 1.55; }
+    .carnival-features {
+      padding: 0 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .feat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .88rem;
+      color: var(--muted);
+    }
+    .feat::before {
+      content: '✓';
+      width: 18px; height: 18px;
+      background: #dcfce7;
+      color: #16a34a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .7rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* ── PATHWAY ── */
+    .pathway-section {
+      background: linear-gradient(135deg, var(--navy) 0%, #1e3a7b 100%);
+      color: white;
+      padding: 80px 24px;
+    }
+    .pathway-inner { max-width: 1100px; margin: 0 auto; }
+    .pathway-section .section-label { color: #60a5fa; }
+    .pathway-section h2 { color: white; margin-bottom: 12px; }
+    .pathway-section .section-sub { color: rgba(255,255,255,.7); }
+    .pathway {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .pathway-step {
+      flex: 1;
+      min-width: 180px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      padding: 28px 22px;
+      position: relative;
+      text-align: center;
+      transition: background .2s;
+    }
+    .pathway-step:hover { background: rgba(255,255,255,.1); }
+    .pathway-step + .pathway-step { margin-left: 12px; }
+    .pathway-step::after {
+      content: '→';
+      position: absolute;
+      right: -20px; top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,.3);
+      font-size: 1.4rem;
+      z-index: 1;
+    }
+    .pathway-step:last-child::after { display: none; }
+    @media (max-width: 700px) {
+      .pathway { flex-direction: column; }
+      .pathway-step { margin-left: 0 !important; margin-top: 12px; }
+      .pathway-step::after { display: none; }
+    }
+    .pathway-step .level-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 12px;
+    }
+    .badge-school  { background: rgba(96,165,250,.2); color: #93c5fd; }
+    .badge-district{ background: rgba(52,211,153,.2); color: #6ee7b7; }
+    .badge-hub{ background: rgba(251,146,60,.2); color: #fdba74; }
+    .badge-region  { background: rgba(167,139,250,.2); color: #c4b5fd; }
+    .badge-state   { background: rgba(251,191,36,.2); color: #fde68a; }
+    .pathway-step .step-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+    .pathway-step h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .pathway-step p { font-size: .82rem; opacity: .65; line-height: 1.5; }
+    .pathway-step a {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: .78rem;
+      color: #60a5fa;
+      border: 1px solid rgba(96,165,250,.3);
+      padding: 4px 10px;
+      border-radius: 6px;
+      transition: all .15s;
+    }
+    .pathway-step a:hover { background: rgba(96,165,250,.15); }
+    .pathway-step.current {
+      background: rgba(26,86,219,.25);
+      border-color: rgba(96,165,250,.5);
+    }
+
+    /* ── FEATURES GRID ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .feature-item {
+      display: flex;
+      gap: 16px;
+      padding: 22px;
+      background: white;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      transition: box-shadow .2s;
+    }
+    .feature-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .feature-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .feature-item h4 { font-size: .95rem; font-weight: 700; margin-bottom: 4px; }
+    .feature-item p { font-size: .85rem; color: var(--muted); line-height: 1.55; }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .plan {
+      border-radius: 18px;
+      padding: 32px 28px;
+      border: 2px solid var(--border);
+      position: relative;
+      transition: transform .2s;
+    }
+    .plan:hover { transform: translateY(-3px); }
+    .plan.featured {
+      border-color: var(--blue);
+      background: linear-gradient(160deg, #eff6ff, #fff);
+    }
+    .plan-badge {
+      position: absolute;
+      top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--blue);
+      color: white;
+      font-size: .75rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .plan-name { font-size: 1rem; font-weight: 700; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: .5px; }
+    .plan-price { font-size: 2.6rem; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+    .plan-price sup { font-size: 1.2rem; vertical-align: top; margin-top: 8px; }
+    .plan-price .period { font-size: .95rem; font-weight: 500; color: var(--muted); }
+    .plan-desc { font-size: .88rem; color: var(--muted); margin: 12px 0 24px; line-height: 1.55; }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .plan-features li {
+      display: flex; gap: 8px; align-items: flex-start;
+      font-size: .88rem; color: var(--text);
+    }
+    .plan-features li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .plan-btn {
+      display: block;
+      text-align: center;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .95rem;
+      transition: all .2s;
+      cursor: pointer;
+    }
+    .plan-btn.outline {
+      border: 2px solid var(--border);
+      color: var(--text);
+    }
+    .plan-btn.outline:hover { border-color: var(--blue); color: var(--blue); }
+    .plan-btn.solid {
+      background: var(--blue);
+      color: white;
+    }
+    .plan-btn.solid:hover { background: #1648c0; }
+
+    /* ── PILOT ── */
+    .pilot-section {
+      background: linear-gradient(135deg, #fefce8, #fff7ed);
+      border-top: 1px solid #fde68a;
+      border-bottom: 1px solid #fde68a;
+      padding: 60px 24px;
+      text-align: center;
+    }
+    .pilot-inner { max-width: 700px; margin: 0 auto; }
+    .pilot-section h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; }
+    .pilot-section p { color: var(--muted); font-size: 1rem; line-height: 1.65; margin-bottom: 28px; }
+    .pilot-schools {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .school-chip {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .school-chip.filled {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+    .school-chip.filled::before { content: '✓ '; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.6);
+      padding: 50px 24px 30px;
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 700px) {
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    .footer-brand .logo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 10px;
+    }
+    .footer-brand p {
+      font-size: .85rem;
+      line-height: 1.6;
+      max-width: 240px;
+    }
+    .footer-col h4 {
+      color: rgba(255,255,255,.9);
+      font-size: .85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 14px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: .85rem;
+      color: rgba(255,255,255,.55);
+      margin-bottom: 8px;
+      transition: color .15s;
+    }
+    .footer-col a:hover { color: rgba(255,255,255,.9); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: .8rem;
+    }
+    .footer-bottom a { color: rgba(255,255,255,.5); }
+    .footer-bottom a:hover { color: white; }
+  </style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<div class="topbar">
+  <span>🏫 Proudly built by a PE teacher, for PE teachers — Victoria</span>
+  <div class="topbar-links">
+    <a href="https://www.ssv.vic.edu.au/" target="_blank" rel="noopener">School Sport Victoria</a>
+    <span class="topbar-sep">|</span>
+    <a href="https://www.ssv.vic.edu.au/western-metropolitan-primary/hobsons-bay-primary" target="_blank" rel="noopener">Hobsons Bay District</a>
+    <span class="topbar-sep">|</span>
+    <a href="https://www.ssv.vic.edu.au/western-metropolitan-primary" target="_blank" rel="noopener">WMR Primary Hub</a>
+  </div>
+</div>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">🏃</div>
+    SportCarnival
+  </a>
+  <div class="nav-links">
+    <a href="#how-it-works">How It Works</a>
+    <a href="#carnivals">Carnivals</a>
+    <a href="#pathway">Pathway</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#pilot" class="nav-cta">Get Early Access</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Now in Development · District Pilot Coming 2026
+  </div>
+  <h1>
+    School Carnivals.<br>
+    <span class="highlight">Run Them Properly.</span>
+  </h1>
+  <p>
+    Manage student entries, draw heats automatically, record results live and track house points — for athletics, swimming and cross country carnivals — all in one place.
+  </p>
+  <div class="hero-actions">
+    <a href="#pilot" class="btn-primary">🎉 Join the Pilot &nbsp;→</a>
+    <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="num">3</div>
+      <div class="lbl">Carnival Types</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">Free</div>
+      <div class="lbl">For Schools</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">∞</div>
+      <div class="lbl">Entries & Events</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">Live</div>
+      <div class="lbl">Results & Points</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<div class="section-bg" id="how-it-works">
+  <div class="section">
+    <div class="section-label">How It Works</div>
+    <h2>From setup to trophy — in minutes.</h2>
+    <p class="section-sub">SportCarnival handles the paperwork so you can focus on running a great day. Four simple steps gets you from nothing to a fully drawn carnival.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Set Up Your Carnival</h3>
+        <p>Choose your carnival type, set the date, configure your house colours and age groups. Takes under 5 minutes.</p>
+        <span class="step-arrow">›</span>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Enter Athletes</h3>
+        <p>Import your student list or enter athletes manually. Assign events, age groups and houses.</p>
+        <span class="step-arrow">›</span>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Draw the Heats</h3>
+        <p>SportCarnival automatically generates heat draws based on entries. Print or share directly. No spreadsheets required.</p>
+        <span class="step-arrow">›</span>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Record Results Live</h3>
+        <p>Enter results on the day — points auto-calculate, leaderboards update instantly and records are flagged automatically.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CARNIVAL TYPES ── -->
+<div id="carnivals">
+  <div class="section">
+    <div class="section-label">Carnival Types</div>
+    <h2>Built for every carnival your school runs.</h2>
+    <p class="section-sub">Whether it's sprints on the oval or laps in the pool, SportCarnival adapts to how your school does things.</p>
+    <div class="carnival-cards">
+
+      <div class="carnival-card">
+        <div class="carnival-card-header">
+          <div class="carnival-icon" style="background:#eff6ff;">🏃</div>
+          <div>
+            <h3>Athletics Carnival</h3>
+            <p>Track & field events for the whole school. Sprints, relays, jumps and throws — all managed in one place.</p>
+          </div>
+        </div>
+        <div class="carnival-features">
+          <div class="feat">Sprint, middle & long distance events</div>
+          <div class="feat">Long jump, high jump & triple jump</div>
+          <div class="feat">Shot put, discus & ball throw</div>
+          <div class="feat">Relay heat draws & finals</div>
+          <div class="feat">Novelty & participation events</div>
+          <div class="feat">Automatic heat draws by age group</div>
+        </div>
+      </div>
+
+      <div class="carnival-card" style="border-color: #bae6fd;">
+        <div class="carnival-card-header">
+          <div class="carnival-icon" style="background:#f0f9ff;">🏊</div>
+          <div>
+            <h3>Swimming Carnival</h3>
+            <p>Age-group heats, stroke events and relay finals — plus school team trials for district progression.</p>
+          </div>
+        </div>
+        <div class="carnival-features">
+          <div class="feat">25m & 50m heats by stroke & age</div>
+          <div class="feat">Freestyle, backstroke, breaststroke, butterfly</div>
+          <div class="feat">Novelty events in shallow water</div>
+          <div class="feat">4-event limit per student (auto-enforced)</div>
+          <div class="feat">District team trial selection</div>
+          <div class="feat">House relay management</div>
+        </div>
+      </div>
+
+      <div class="carnival-card" style="border-color: #bbf7d0;">
+        <div class="carnival-card-header">
+          <div class="carnival-icon" style="background:#f0fdf4;">🌲</div>
+          <div>
+            <h3>Cross Country</h3>
+            <p>Course management, age group runs and mass-start results recording. Simple and stress-free.</p>
+          </div>
+        </div>
+        <div class="carnival-features">
+          <div class="feat">Age & gender group runs</div>
+          <div class="feat">Finish order & time recording</div>
+          <div class="feat">House points from placings</div>
+          <div class="feat">District qualifier identification</div>
+          <div class="feat">Certificate generation</div>
+          <div class="feat">Course map embedding</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── PATHWAY ── -->
+<div class="pathway-section" id="pathway">
+  <div class="pathway-inner">
+    <div class="section-label">The Carnival Pathway</div>
+    <h2>From school oval to State Finals.</h2>
+    <p class="section-sub" style="margin-bottom:40px;">SportCarnival follows the official SSV pathway — your school carnival feeds directly into district, then hub, then region, then state.</p>
+    <div class="pathway">
+
+      <div class="pathway-step current">
+        <span class="level-badge badge-school">Your School</span>
+        <span class="step-icon">🏫</span>
+        <h4>School Carnival</h4>
+        <p>Run your house carnival, select your best athletes for district</p>
+        <a href="#">sportcarnival.com.au</a>
+      </div>
+
+      <div class="pathway-step">
+        <span class="level-badge badge-district">District</span>
+        <span class="step-icon">🏘️</span>
+        <h4>Hobsons Bay District</h4>
+        <p>Districts of schools compete for district titles</p>
+        <a href="https://www.ssv.vic.edu.au/western-metropolitan-primary/hobsons-bay-primary" target="_blank" rel="noopener">ssv.vic.edu.au →</a>
+      </div>
+
+      <div class="pathway-step">
+        <span class="level-badge badge-hub">Hub</span>
+        <span class="step-icon">🏙️</span>
+        <h4>WMR Primary</h4>
+        <p>Western Metropolitan Region Primary finals</p>
+        <a href="https://www.ssv.vic.edu.au/western-metropolitan-primary" target="_blank" rel="noopener">ssv.vic.edu.au →</a>
+      </div>
+
+      <div class="pathway-step">
+        <span class="level-badge badge-region">Region</span>
+        <span class="step-icon">🌏</span>
+        <h4>State Qualifier</h4>
+        <p>Top performers progress to state championship qualifying</p>
+        <a href="https://www.ssv.vic.edu.au/" target="_blank" rel="noopener">ssv.vic.edu.au →</a>
+      </div>
+
+      <div class="pathway-step">
+        <span class="level-badge badge-state">State</span>
+        <span class="step-icon">🏆</span>
+        <h4>SSV State Finals</h4>
+        <p>The best in Victoria. SportCarnival helps you get athletes there.</p>
+        <a href="https://www.ssv.vic.edu.au/" target="_blank" rel="noopener">ssv.vic.edu.au →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── FEATURES ── -->
+<div class="section-bg" id="features">
+  <div class="section">
+    <div class="section-label">Features</div>
+    <h2>Everything a PE teacher actually needs.</h2>
+    <p class="section-sub">No bloated software. No training required. Just the tools that make carnival day easier.</p>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="feature-icon" style="background:#eff6ff;">📋</div>
+        <div>
+          <h4>Student Entry Management</h4>
+          <p>Import or manually add athletes, assign events and enforce entry limits per student.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:#f0fdf4;">🔀</div>
+        <div>
+          <h4>Automatic Heat Draw</h4>
+          <p>Heats drawn instantly based on entries. Balanced lanes, correct age groups, no manual sorting.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:#fff7ed;">📊</div>
+        <div>
+          <h4>Live Results Sheet</h4>
+          <p>Enter results as events finish. Points tally in real time. No paper totalling required.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:#fdf4ff;">🏠</div>
+        <div>
+          <h4>House Points Tracker</h4>
+          <p>Configurable points for 1st, 2nd, 3rd. House leaderboard updates live throughout the day.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:#fff1f2;">🖨️</div>
+        <div>
+          <h4>Printable Programs</h4>
+          <p>Generate a full heat draw program for officials and parents with one click. Print-ready PDF.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:#f0f9ff;">🏅</div>
+        <div>
+          <h4>Records & PBs</h4>
+          <p>Automatically flags school records and personal bests as results are entered.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:#fefce8;">📤</div>
+        <div>
+          <h4>District Nomination Export</h4>
+          <p>One-click export of your top performers in the format required for district nomination.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:#f0fdf4;">📱</div>
+        <div>
+          <h4>Works on Any Device</h4>
+          <p>Run it on your phone, tablet or laptop on the day. No app to install. Just open and go.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon" style="background:#fdf4ff;">🔁</div>
+        <div>
+          <h4>Reusable Year to Year</h4>
+          <p>Clone last year's carnival setup, update the students, and you're done. Faster every year.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PRICING ── -->
+<div id="pricing">
+  <div class="section" style="text-align:center;">
+    <div class="section-label">Pricing</div>
+    <h2>Free for schools. Fair for everyone.</h2>
+    <p class="section-sub" style="margin:0 auto 48px;">Start free and run as many carnivals as you like. Upgrade when you need more.</p>
+    <div class="pricing-grid">
+      <div class="plan">
+        <div class="plan-name">Free</div>
+        <div class="plan-price"><sup>$</sup>0 <span class="period">forever</span></div>
+        <p class="plan-desc">Everything you need to run a great carnival. No credit card required.</p>
+        <ul class="plan-features">
+          <li>1 active carnival at a time</li>
+          <li>Unlimited student entries</li>
+          <li>Automatic heat draw</li>
+          <li>Live results & house points</li>
+          <li>Print program & results sheet</li>
+          <li>All 3 carnival types</li>
+        </ul>
+        <a href="#pilot" class="plan-btn outline">Get Started Free</a>
+      </div>
+      <div class="plan featured">
+        <div class="plan-badge">⭐ Most Popular</div>
+        <div class="plan-name">School Pro</div>
+        <div class="plan-price"><sup>$</sup>99 <span class="period">/ yr per school</span></div>
+        <p class="plan-desc">For schools running multiple carnivals and wanting the full experience.</p>
+        <ul class="plan-features">
+          <li>Unlimited carnivals</li>
+          <li>District nomination export</li>
+          <li>School records database</li>
+          <li>Parent-facing live results page</li>
+          <li>Certificate generation</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#pilot" class="plan-btn solid">Start Free Trial</a>
+      </div>
+      <div class="plan">
+        <div class="plan-name">District</div>
+        <div class="plan-price"><sup>$</sup>299 <span class="period">/ yr</span></div>
+        <p class="plan-desc">For district coordinators managing carnivals across multiple schools.</p>
+        <ul class="plan-features">
+          <li>All schools in district</li>
+          <li>Cross-school leaderboards</li>
+          <li>District heat draw management</li>
+          <li>Results upload from school carnivalss</li>
+          <li>SSV-format export</li>
+          <li>Dedicated coordinator dashboard</li>
+        </ul>
+        <a href="#pilot" class="plan-btn outline">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PILOT ── -->
+<div class="pilot-section" id="pilot">
+  <div class="pilot-inner">
+    <div class="section-label" style="color: #92400e;">🚀 Pilot Program</div>
+    <h2>Looking for 2–3 pilot district schools.</h2>
+    <p>We're running a free pilot with a small group of local primary schools before the 2025 athletics season. Pilot schools get full Pro access free for 12 months and direct input into the product.</p>
+    <div class="pilot-schools">
+      <div class="school-chip filled">Pilot School 1 ✓</div>
+      <div class="school-chip">Pilot School 2</div>
+      <div class="school-chip">Altona North PS</div>
+      <div class="school-chip">Newport Gardens PS</div>
+    </div>
+    <a href="mailto:info@sportcarnival.com.au" class="btn-primary" style="background: #d97706; display:inline-flex;">
+      📩 &nbsp; Express Your Interest
+    </a>
+    <p style="margin-top:16px; font-size:.85rem; color:#92400e; opacity:.7;">2 spots remaining · No obligation · Free for pilot schools</p>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">🏃 SportCarnival</div>
+        <p>School carnival management for PE teachers. Built in Victoria.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#carnivals">Carnival Types</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Pathway</h4>
+        <a href="https://www.ssv.vic.edu.au/" target="_blank" rel="noopener">School Sport Victoria</a>
+        <a href="https://www.ssv.vic.edu.au/western-metropolitan-primary/hobsons-bay-primary" target="_blank" rel="noopener">Hobsons Bay District</a>
+        <a href="https://www.ssv.vic.edu.au/western-metropolitan-primary" target="_blank" rel="noopener">WMR Primary Hub</a>
+        <a href="https://www.ssv.vic.edu.au/state" target="_blank" rel="noopener">SSV State Events</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:info@sportcarnival.com.au">info@sportcarnival.com.au</a>
+        <a href="#pilot">Join the Pilot</a>
+        
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 SportCarnival · sportcarnival.com.au · Made with ❤️ in Victoria</span>
+      <span>Not affiliated with School Sport Victoria</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
+
