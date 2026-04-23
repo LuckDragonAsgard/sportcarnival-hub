@@ -1,7 +1,23 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {"source": "/williamstownps/athletics", "destination": "/williamstownps/athletics.html"},
     {"source": "/williamstownps/swimming", "destination": "/williamstownps/swimming.html"},
-    {"source": "/williamstownps/crosscountry", "destination": "/williamstownps/crosscountry.html"}
-  ]
+    {"source": "/williamstownps/crosscountry", "destination": "/williamstownps/crosscountry.html"},
+    {"source": "/demo-school/athletics", "destination": "/demo-school/athletics.html"},
+    {"source": "/demo-school/swimming", "destination": "/demo-school/swimming.html"},
+    {"source": "/demo-school/crosscountry", "destination": "/demo-school/crosscountry.html"}
+  ],
+  "headers": [{
+    "source": "/(.*)",
+    "headers": [
+      {"key": "X-Content-Type-Options", "value": "nosniff"},
+      {"key": "X-Frame-Options", "value": "DENY"},
+      {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
+      {"key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"},
+      {"key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload"},
+      {"key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://*.firebaseio.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.firebaseio.com https://*.firebasedatabase.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"}
+    ]
+  }]
 }
