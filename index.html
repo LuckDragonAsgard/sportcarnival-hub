@@ -2134,6 +2134,20 @@ const RACE_LABELS = {
   '12Boys':  '12/13 Year Boys — 3km'
 };
 
+
+const SCHOOL_LOGOS = {
+  'Altona PS': 'https://static.wixstatic.com/media/71905a_b2a1664aced5451e9b7bdcf9a0512ab2~mv2_d_1933_2020_s_2.png/v1/fill/w_128,h_130,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/APS-logo.png',
+  'Newport Gardens PS': 'https://www.newportgardensps.vic.edu.au/wp-content/uploads/2020/05/logo.png',
+  'Newport Lakes PS': 'https://newportlakesps.vic.edu.au/wp-content/uploads/2019/06/Logo-Horizontal.png',
+  'Seaholme PS': 'https://seaholmeps.rhost5.classr3.com.au/wp-content/uploads/2020/03/seaholme-primary-school-logo-1.png',
+  'Williamstown North PS': 'https://www.williamstownnorthps.vic.edu.au/hidden-assets/FIles-excluded-from-Search/williamstown-north-PS-logo-JTTrace.svg?v=1653441893',
+  'Williamstown PS': 'https://www.williamstownps.vic.edu.au/uploaded_files/site_header/williamstown_ps.png',
+  'St Marys PS Williamstown': 'https://smcpswilliamstown.schoolzineplus.com/_image/media/2864/st_mary_s_williamstown_vertical_lock_up_colour_v2.png',
+};
+
+function schoolInitials(name) {
+  return name.split(' ').filter(w => w.length > 2 && w[0] === w[0].toUpperCase()).map(w => w[0]).join('').slice(0,3);
+}
 function initDrawView() {
   const el = document.getElementById('draw-content');
   cRef('roster').once('value', snap => {
@@ -2168,8 +2182,17 @@ function initDrawView() {
       });
 
       Object.entries(bySchool).sort(([a],[b])=>a.localeCompare(b)).forEach(([school, kids]) => {
+        const logoUrl = SCHOOL_LOGOS[school];
+        const initials = schoolInitials(school);
+        const logoHtml = logoUrl
+          ? `<img src="${logoUrl}" style="width:32px;height:32px;object-fit:contain;border-radius:4px;flex-shrink:0" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
+            + `<div style="display:none;width:32px;height:32px;background:var(--accent);border-radius:4px;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff;flex-shrink:0">${initials}</div>`
+          : `<div style="width:32px;height:32px;background:var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff;flex-shrink:0">${initials}</div>`;
         html += `<div style="padding:6px 16px;border-bottom:1px solid var(--border)">
-          <div style="font-size:.75rem;color:var(--muted);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">${school}</div>`;
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            ${logoHtml}
+            <div style="font-size:.8rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em">${school}</div>
+          </div>`;
         kids.forEach(r => {
           html += `<div style="display:flex;align-items:center;gap:10px;padding:3px 0">
             <span style="font-size:.8rem;color:var(--muted);width:28px;text-align:right;flex-shrink:0">#${r.num}</span>
