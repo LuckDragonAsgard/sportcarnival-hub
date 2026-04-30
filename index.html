@@ -2173,7 +2173,7 @@ function initDrawView() {
         kids.forEach(r => {
           html += `<div style="display:flex;align-items:center;gap:10px;padding:3px 0">
             <span style="font-size:.8rem;color:var(--muted);width:28px;text-align:right;flex-shrink:0">#${r.num}</span>
-            <span style="font-size:.92rem">${r.first} ${r.lastInitial || (r.last ? r.last.charAt(0) : '')}.</span>
+            <span style="font-size:.92rem">${r.first} ${r.last}</span>
           </div>`;
         });
         html += `</div>`;
