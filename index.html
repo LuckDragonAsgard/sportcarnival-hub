@@ -885,6 +885,22 @@ Content-Type: text/html; charset=utf-8
   </div>
 </div>
 
+
+<!-- ════════════════════════════════════════
+     DRAW SCREEN
+════════════════════════════════════════ -->
+<div id="screen-draw" class="screen">
+  <div class="header">
+    <div class="logo-badge">SP</div>
+    <div class="header-title">Draw</div>
+    <div class="header-right">
+      <button class="btn btn-icon btn-sm" onclick="showRolePicker()">← Back</button>
+    </div>
+  </div>
+  <div class="content">
+    <div id="draw-content" class="text-muted text-center mt-32">Loading draw...</div>
+  </div>
+</div>
 <!-- ════════════════════════════════════════
      OVERLAYS
 ════════════════════════════════════════ -->
@@ -1216,6 +1232,7 @@ function showRolePicker() {
   }
   roles.push({ id:'share',   icon:'📱', label:'Join Page',  desc:'QR code for participants', full:true });
   roles.push({ id:'results', icon:'📊', label:'Results',    desc:'View all results',          full:true });
+  roles.push({ id:'draw',    icon:'📋', label:'Draw',       desc:'View all entrants',         full:true });
 
   grid.innerHTML = roles.map(r => `
     <div class="role-card${r.full?' full':''}" onclick="enterRole('${r.id}')">
@@ -1246,6 +1263,7 @@ function enterRole(role) {
   if (role === 'admin-xc'){ showScreen('admin-xc');   initXCAdminView();    return; }
   if (role === 'observer-xc'){ showScreen('observer-xc'); initXCObserverView(); return; }
   if (role === 'results') { showScreen('results');     initResultsView();    return; }
+  if (role === 'draw')    { showScreen('draw');       initDrawView();       return; }
   if (role === 'role')    { showRolePicker();           return; }
 }
 
@@ -2103,6 +2121,65 @@ async function routeFromURL() {
 // ── INIT ──
 syncClock();
 routeFromURL();
+
+
+// ─── DRAW VIEW ───────────────────────────────────────────────────────────────
+const RACE_ORDER = ['10Girls','10Boys','11Girls','11Boys','12Girls','12Boys'];
+const RACE_LABELS = {
+  '10Girls': '10 & Under Girls — 2km',
+  '10Boys':  '10 & Under Boys — 2km',
+  '11Girls': '11 Year Girls — 3km',
+  '11Boys':  '11 Year Boys — 3km',
+  '12Girls': '12/13 Year Girls — 3km',
+  '12Boys':  '12/13 Year Boys — 3km'
+};
+
+function initDrawView() {
+  const el = document.getElementById('draw-content');
+  cRef('roster').once('value', snap => {
+    const roster = snap.val();
+    if (!roster) { el.innerHTML = '<p class="text-muted">No draw loaded yet.</p>'; return; }
+
+    let html = '<div style="padding-bottom:24px">';
+    html += `<div style="text-align:center;margin-bottom:16px;font-size:.85rem;color:var(--muted)">McIvor Reserve, Yarraville · Thu 7 May 2026</div>`;
+
+    const keys = RACE_ORDER.filter(k => roster[k]);
+    keys.forEach(key => {
+      const group = roster[key];
+      const runners = Array.isArray(group.runners) ? group.runners : Object.values(group.runners || {});
+      runners.sort((a,b) => a.num - b.num);
+
+      html += `<div style="margin:0 -16px 20px;background:var(--surface2);padding:10px 16px 4px">
+        <div style="font-weight:700;font-size:.95rem;color:var(--accent);margin-bottom:2px">${RACE_LABELS[key] || key}</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px">${group.race || ''}</div>
+      </div>`;
+
+      // Group by school
+      const bySchool = {};
+      runners.forEach(r => {
+        if (!r.first && !r.last) return; // skip blanks
+        const s = r.school || 'TBC';
+        if (!bySchool[s]) bySchool[s] = [];
+        bySchool[s].push(r);
+      });
+
+      Object.entries(bySchool).sort(([a],[b])=>a.localeCompare(b)).forEach(([school, kids]) => {
+        html += `<div style="padding:6px 16px;border-bottom:1px solid var(--border)">
+          <div style="font-size:.75rem;color:var(--muted);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">${school}</div>`;
+        kids.forEach(r => {
+          html += `<div style="display:flex;align-items:center;gap:10px;padding:3px 0">
+            <span style="font-size:.8rem;color:var(--muted);width:28px;text-align:right;flex-shrink:0">#${r.num}</span>
+            <span style="font-size:.92rem">${r.first} ${r.last}</span>
+          </div>`;
+        });
+        html += `</div>`;
+      });
+    });
+
+    html += '</div>';
+    el.innerHTML = html;
+  });
+}
 
 </script>
 
