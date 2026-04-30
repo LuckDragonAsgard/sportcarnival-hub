@@ -52,6 +52,31 @@ nav{background:#0C0C1A;border-bottom:2px solid var(--gold);padding:12px 20px;dis
 .upcoming-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
 .upcoming-title{font-size:20px;font-weight:900;margin-bottom:4px;}
 .upcoming-detail{font-size:13px;color:var(--muted);}
+/* LIVE RESULTS */
+#live-results-section{margin-bottom:24px;}
+.live-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#22C55E;animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.85);}}
+.live-dot.inactive{background:var(--muted);animation:none;}
+.live-badge{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#22C55E;}
+.live-badge.inactive{color:var(--muted);}
+.live-carnival-name{font-size:12px;color:var(--muted);margin-left:auto;}
+.results-waiting{text-align:center;padding:36px 20px;color:var(--muted);}
+.results-waiting .wait-icon{font-size:32px;margin-bottom:10px;}
+.results-waiting p{font-size:13px;line-height:1.6;}
+.result-block{background:var(--card);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px;margin-bottom:12px;}
+.result-event{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.result-table{width:100%;border-collapse:collapse;font-size:13px;}
+.result-table th{text-align:left;padding:6px 8px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.result-table td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.result-table tr:last-child td{border:none;}
+.place-cell{font-weight:900;color:var(--gold);width:32px;}
+.place-cell.p1{color:#FFD700;}
+.place-cell.p2{color:#C0C0C0;}
+.place-cell.p3{color:#CD7F32;}
+.time-cell{font-family:'SF Mono',Menlo,monospace;font-size:12px;color:#aaa;}
+.dq-cell{color:#ef4444;font-size:10px;font-weight:700;text-transform:uppercase;}
+.house-pill{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;}
 /* FOOTER */
 footer{background:#0C0C1A;border-top:1px solid rgba(255,255,255,0.05);padding:20px;text-align:center;font-size:12px;color:var(--muted);margin-top:40px;}
 footer a{color:var(--gold);text-decoration:none;}
@@ -87,6 +112,22 @@ footer a{color:var(--gold);text-decoration:none;}
 </div>
 
 <div class="content">
+
+  <!-- LIVE RESULTS — populated by Firebase -->
+  <div id="live-results-section">
+    <div class="live-header">
+      <span class="live-dot inactive" id="live-dot"></span>
+      <span class="live-badge inactive" id="live-badge">Results</span>
+      <span class="live-carnival-name" id="live-carnival-name"></span>
+    </div>
+    <div id="live-results-body">
+      <div class="results-waiting">
+        <div class="wait-icon">🏃</div>
+        <p>Results will appear here live on carnival day.<br>
+        Timers tap finish on their phones — this page updates instantly.</p>
+      </div>
+    </div>
+  </div>
 
   <div class="upcoming">
     <div class="upcoming-label">Next Carnival</div>
@@ -150,6 +191,156 @@ footer a{color:var(--gold);text-decoration:none;}
   <a href="https://schoolsportportal.com.au/williamstowndistrict">Williamstown District</a> &nbsp;·&nbsp;
   <a href="https://schoolsportportal.com.au/hobsonsbaydivision">Hobsons Bay Division</a>
 </footer>
+
+<!-- Firebase: read-only live results -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+(function(){
+  const FB_CONFIG = {
+    apiKey: "AIzaSyA-bNl8XqvZ7DQ6YftL9teXbqxYICBlPF8",
+    authDomain: "willy-district-sport.firebaseapp.com",
+    databaseURL: "https://willy-district-sport-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "willy-district-sport"
+  };
+
+  // This page shows athletics carnivals for Williamstown PS
+  const SCHOOL_MATCH = /williamstown/i;
+  const SPORT_MATCH  = /athletics|track/i;
+  // Also show carnivals with no sport set (default)
+
+  try { firebase.initializeApp(FB_CONFIG); } catch(e){}
+
+  const db = firebase.database();
+  const dot  = document.getElementById('live-dot');
+  const badge = document.getElementById('live-badge');
+  const nameEl = document.getElementById('live-carnival-name');
+  const body  = document.getElementById('live-results-body');
+
+  db.ref('carnivalResults').on('value', function(snap) {
+    const all = snap.val();
+    if (!all) { renderWaiting(); return; }
+
+    // Collect matching carnivals
+    const matching = [];
+    Object.entries(all).forEach(function([code, data]) {
+      if (!data || !data.meta) return;
+      const school = data.meta.school || '';
+      const sport  = data.meta.sport  || '';
+      if (!SCHOOL_MATCH.test(school)) return;
+      if (sport && !SPORT_MATCH.test(sport)) return;
+      matching.push({ code: code, meta: data.meta, results: data.results || {} });
+    });
+
+    if (!matching.length) { renderWaiting(); return; }
+
+    // Sort: most recent carnival first (by createdAt)
+    matching.sort(function(a, b) {
+      return (b.meta.createdAt || 0) - (a.meta.createdAt || 0);
+    });
+
+    // Use the most recent carnival's results
+    const carnival = matching[0];
+    renderResults(carnival);
+  }, function(err) {
+    console.error('Firebase error', err);
+    renderWaiting();
+  });
+
+  function renderWaiting() {
+    dot.className = 'live-dot inactive';
+    badge.className = 'live-badge inactive';
+    badge.textContent = 'Results';
+    nameEl.textContent = '';
+    body.innerHTML = '<div class="results-waiting"><div class="wait-icon">🏃</div>' +
+      '<p>Results will appear here live on carnival day.<br>' +
+      'Timers tap finish on their phones — this page updates instantly.</p></div>';
+  }
+
+  function fmtTime(ms) {
+    if (!ms && ms !== 0) return '—';
+    var s = ms / 1000;
+    if (s >= 60) {
+      var m = Math.floor(s / 60);
+      var sec = (s % 60).toFixed(2);
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+    return s.toFixed(2) + 's';
+  }
+
+  function placeClass(n) {
+    if (n === 1) return 'place-cell p1';
+    if (n === 2) return 'place-cell p2';
+    if (n === 3) return 'place-cell p3';
+    return 'place-cell';
+  }
+
+  function renderResults(carnival) {
+    // Mark as live
+    dot.className = 'live-dot';
+    badge.className = 'live-badge';
+    badge.textContent = 'Live Results';
+    nameEl.textContent = carnival.meta.name || carnival.meta.carnivalName || '';
+
+    var resultsObj = carnival.results;
+    var keys = Object.keys(resultsObj);
+
+    if (!keys.length) {
+      body.innerHTML = '<div class="results-waiting">' +
+        '<div class="wait-icon">⏱️</div>' +
+        '<p>Carnival connected — results will appear as each event is published.</p></div>';
+      return;
+    }
+
+    // Sort by publishedAt desc
+    keys.sort(function(a, b) {
+      return (resultsObj[b].publishedAt || 0) - (resultsObj[a].publishedAt || 0);
+    });
+
+    var html = '';
+    keys.forEach(function(key) {
+      var r = resultsObj[key];
+      html += '<div class="result-block">';
+      html += '<div class="result-event">' + escHtml(r.event || key);
+      if (r.age)    html += ' &nbsp;·&nbsp; ' + escHtml(String(r.age));
+      if (r.gender) html += ' ' + escHtml(r.gender);
+      html += '</div>';
+      html += '<table class="result-table"><thead><tr>' +
+        '<th>#</th><th>Athlete</th><th>Time</th></tr></thead><tbody>';
+
+      // Lane results
+      var places = [];
+      if (r.type === 'lane' && r.results) {
+        places = Array.isArray(r.results) ? r.results : Object.values(r.results);
+      } else if (r.places) {
+        places = Array.isArray(r.places) ? r.places : Object.values(r.places);
+      }
+
+      if (places.length) {
+        places.forEach(function(p, i) {
+          var isDQ = p.dq || false;
+          var placeNum = isDQ ? 'DQ' : (p.place || (i + 1));
+          html += '<tr>' +
+            '<td class="' + (isDQ ? 'dq-cell' : placeClass(typeof placeNum === 'number' ? placeNum : 99)) + '">' + placeNum + '</td>' +
+            '<td>' + escHtml(p.name || p.lane || ('Lane ' + (i + 1))) + '</td>' +
+            '<td class="time-cell">' + (isDQ ? '<span class="dq-cell">DQ</span>' : fmtTime(p.elapsedMs)) + '</td>' +
+            '</tr>';
+        });
+      } else {
+        html += '<tr><td colspan="3" style="color:var(--muted);font-size:12px;padding:10px 8px;">No places recorded</td></tr>';
+      }
+
+      html += '</tbody></table></div>';
+    });
+
+    body.innerHTML = html;
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+})();
+</script>
 
 </body>
 </html>
