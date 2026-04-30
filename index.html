@@ -2149,14 +2149,18 @@ function initDrawView() {
       const runners = Array.isArray(group.runners) ? group.runners : Object.values(group.runners || {});
       runners.sort((a,b) => a.num - b.num);
 
+      const namedRunners = runners.filter(r => r.first || r.last);
       html += `<div style="margin:0 -16px 20px;background:var(--surface2);padding:10px 16px 4px">
-        <div style="font-weight:700;font-size:.95rem;color:var(--accent);margin-bottom:2px">${RACE_LABELS[key] || key}</div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-weight:700;font-size:.95rem;color:var(--accent);margin-bottom:2px">${RACE_LABELS[key] || key}</div>
+          <div style="font-size:.75rem;color:var(--muted)">${namedRunners.length} runners</div>
+        </div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px">${group.race || ''}</div>
       </div>`;
 
       // Group by school
       const bySchool = {};
-      runners.forEach(r => {
+      namedRunners.forEach(r => {
         if (!r.first && !r.last) return; // skip blanks
         const s = r.school || 'TBC';
         if (!bySchool[s]) bySchool[s] = [];
@@ -2169,7 +2173,7 @@ function initDrawView() {
         kids.forEach(r => {
           html += `<div style="display:flex;align-items:center;gap:10px;padding:3px 0">
             <span style="font-size:.8rem;color:var(--muted);width:28px;text-align:right;flex-shrink:0">#${r.num}</span>
-            <span style="font-size:.92rem">${r.first} ${r.last}</span>
+            <span style="font-size:.92rem">${r.first} ${r.lastInitial || (r.last ? r.last.charAt(0) : '')}.</span>
           </div>`;
         });
         html += `</div>`;
