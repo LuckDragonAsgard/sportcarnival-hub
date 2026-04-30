@@ -14,41 +14,42 @@ nav{background:#0C0C1A;border-bottom:2px solid var(--gold);padding:12px 20px;dis
 .nav-name{font-weight:800;font-size:16px;letter-spacing:1px;}
 .nav-links{display:flex;gap:6px;flex-wrap:wrap;}
 .nav-links a{color:var(--muted);font-size:12px;text-decoration:none;padding:4px 10px;border:1px solid rgba(255,255,255,0.08);border-radius:5px;}
-.nav-links a:hover{color:#63B3ED;border-color:rgba(99,179,237,0.3);}
-.nav-links a.active{color:#63B3ED;border-color:#63B3ED;}
-.hero{background:linear-gradient(135deg,#080818,#0a1020);border-bottom:1px solid rgba(99,179,237,.2);padding:50px 20px;text-align:center;}
-.hero-school{font-size:12px;font-weight:700;letter-spacing:3px;color:#63B3ED;text-transform:uppercase;margin-bottom:8px;}
+.nav-links a:hover{color:var(--gold);border-color:rgba(245,197,24,0.3);}
+.nav-links a.active{color:var(--gold);border-color:var(--gold);}
+.hero{background:linear-gradient(135deg,#07101a,#0a1828);border-bottom:1px solid rgba(245,197,24,0.15);padding:50px 20px;text-align:center;}
+.hero-school{font-size:12px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
 .hero-title{font-size:36px;font-weight:900;letter-spacing:1px;margin-bottom:8px;}
 .hero-sub{color:var(--muted);font-size:15px;margin-bottom:24px;}
 .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 .btn{border:none;border-radius:8px;padding:11px 22px;cursor:pointer;font-size:14px;font-weight:800;letter-spacing:1px;font-family:var(--font);text-decoration:none;display:inline-flex;align-items:center;gap:7px;}
-.btn-blue{background:#3B82F6;color:#fff;}
+.btn-gold{background:var(--gold);color:#000;}
 .btn-ghost{background:none;border:1px solid rgba(255,255,255,0.15);color:var(--text);}
 .btn:hover{opacity:.88;}
 .content{max-width:1000px;margin:0 auto;padding:30px 20px;}
-.section-title{font-size:12px;font-weight:700;letter-spacing:2px;color:#63B3ED;text-transform:uppercase;margin-bottom:16px;}
+.section-title{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
 .card{background:var(--card);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:18px;}
 .stat{text-align:center;padding:16px;}
-.stat-num{font-size:28px;font-weight:900;color:#63B3ED;}
+.stat-num{font-size:28px;font-weight:900;color:var(--gold);}
 .stat-lbl{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
 .event-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;}
 .event-row:last-child{border:none;}
 .event-name{font-weight:600;}
 .event-type{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:700;}
-.swim{background:rgba(99,179,237,.15);color:#63B3ED;}
-.relay{background:rgba(168,85,247,.15);color:#A855F7;}
+.swim-free{background:rgba(59,130,246,.15);color:#63B3ED;}
+.swim-back{background:rgba(139,92,246,.15);color:#A78BFA;}
+.swim-breast{background:rgba(34,197,94,.15);color:#22C55E;}
+.swim-fly{background:rgba(245,158,11,.15);color:#FCD34D;}
+.swim-relay{background:rgba(236,72,153,.15);color:#F9A8D4;}
 .house-bar{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;}
 .house-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
 .house-name{flex:1;font-weight:700;}
-.upcoming{background:rgba(99,179,237,0.06);border:1px solid rgba(99,179,237,0.2);border-radius:10px;padding:20px;margin-bottom:20px;}
+.upcoming{background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:20px;margin-bottom:20px;}
 .upcoming-label{font-size:10px;font-weight:700;letter-spacing:2px;color:#63B3ED;text-transform:uppercase;margin-bottom:6px;}
 .upcoming-title{font-size:20px;font-weight:900;margin-bottom:4px;}
 .upcoming-detail{font-size:13px;color:var(--muted);}
-.pool-badge{background:rgba(99,179,237,.1);border:1px solid rgba(99,179,237,.25);border-radius:6px;padding:6px 14px;display:inline-block;font-size:12px;color:#63B3ED;font-weight:700;margin-top:8px;}
-/* LIVE RESULTS */
-#live-results-section{margin-bottom:24px;}
+/* LIVE STATUS */
 .live-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .live-dot{width:8px;height:8px;border-radius:50%;background:#22C55E;animation:pulse 1.5s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.85);}}
@@ -59,22 +60,42 @@ nav{background:#0C0C1A;border-bottom:2px solid var(--gold);padding:12px 20px;dis
 .results-waiting{text-align:center;padding:36px 20px;color:var(--muted);}
 .results-waiting .wait-icon{font-size:32px;margin-bottom:10px;}
 .results-waiting p{font-size:13px;line-height:1.6;}
+/* HOUSE LEADERBOARD */
+.house-leaderboard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}
+@media(max-width:560px){.house-leaderboard{grid-template-columns:repeat(2,1fr);}}
+.house-card{border-radius:12px;padding:16px;text-align:center;position:relative;border:2px solid transparent;}
+.house-card.leader{border-color:var(--gold);}
+.house-card .h-pts{font-size:30px;font-weight:900;line-height:1;}
+.house-card .h-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:6px;opacity:.85;}
+.house-card .h-rank{position:absolute;top:8px;right:10px;font-size:10px;font-weight:900;color:rgba(255,255,255,.4);}
+.house-card.leader .h-rank{color:var(--gold);}
+/* RESULTS */
 .result-block{background:var(--card);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px;margin-bottom:12px;}
-.result-event{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#63B3ED;margin-bottom:10px;}
+.result-event{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
 .result-table{width:100%;border-collapse:collapse;font-size:13px;}
 .result-table th{text-align:left;padding:6px 8px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.06);}
 .result-table td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,0.04);}
 .result-table tr:last-child td{border:none;}
-.place-cell{font-weight:900;color:#63B3ED;width:32px;}
-.place-cell.p1{color:#FFD700;}
-.place-cell.p2{color:#C0C0C0;}
-.place-cell.p3{color:#CD7F32;}
+.place-cell{font-weight:900;color:var(--gold);width:32px;}
+.place-cell.p1{color:#FFD700;}.place-cell.p2{color:#C0C0C0;}.place-cell.p3{color:#CD7F32;}
 .time-cell{font-family:'SF Mono',Menlo,monospace;font-size:12px;color:#aaa;}
-.dq-cell{color:#ef4444;font-size:10px;font-weight:700;text-transform:uppercase;}
+.dq-cell{color:#ef4444;font-size:10px;font-weight:700;}
+.house-pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;}
+/* DISTRICT QUALIFIERS */
+.qual-block{background:var(--card);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px;margin-bottom:12px;}
+.qual-event{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#A855F7;margin-bottom:8px;}
+.qual-row{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04);}
+.qual-row:last-child{border:none;}
+.qual-place{font-weight:900;color:#A855F7;width:24px;}
+.qual-time{font-family:'SF Mono',Menlo,monospace;font-size:12px;color:#aaa;margin-left:auto;}
+/* SECTION TABS */
+.tab-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.tab-btn{padding:7px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);letter-spacing:.5px;}
+.tab-btn.active{background:var(--gold);color:#000;border-color:var(--gold);}
+.tab-panel{display:none;}.tab-panel.active{display:block;}
 footer{background:#0C0C1A;border-top:1px solid rgba(255,255,255,0.05);padding:20px;text-align:center;font-size:12px;color:var(--muted);margin-top:40px;}
-footer a{color:#63B3ED;text-decoration:none;}
-.mt20{margin-top:20px;}
-.mb16{margin-bottom:16px;}
+footer a{color:var(--gold);text-decoration:none;}
+.mt20{margin-top:20px;}.mb16{margin-bottom:16px;}
 @media(max-width:600px){.g2,.g3{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -97,91 +118,113 @@ footer a{color:#63B3ED;text-decoration:none;}
 <div class="hero">
   <div class="hero-school">Williamstown Primary School</div>
   <div class="hero-title">Swimming Carnival</div>
-  <div class="hero-sub">Williamstown SLSC &nbsp;|&nbsp; 33m Pool &nbsp;|&nbsp; Hobsons Bay &amp; Wyndham Division</div>
+  <div class="hero-sub">Altona Memorial Park Pool &nbsp;|&nbsp; Hobsons Bay &amp; Wyndham Division</div>
   <div class="hero-actions">
-    <a href="https://sportcarnival.com.au" class="btn btn-blue">Create New Carnival</a>
+    <a href="https://sportcarnival.com.au" class="btn btn-gold">Create New Carnival</a>
     <a href="https://sportcarnival.com.au" class="btn btn-ghost">Manage Existing</a>
   </div>
 </div>
 
 <div class="content">
 
-  <!-- LIVE RESULTS — populated by Firebase -->
-  <div id="live-results-section">
-    <div class="live-header">
-      <span class="live-dot inactive" id="live-dot"></span>
-      <span class="live-badge inactive" id="live-badge">Results</span>
-      <span class="live-carnival-name" id="live-carnival-name"></span>
+  <!-- Live status bar -->
+  <div class="live-header" style="margin-bottom:20px">
+    <span class="live-dot inactive" id="live-dot"></span>
+    <span class="live-badge inactive" id="live-badge">Not live</span>
+    <span class="live-carnival-name" id="live-carnival-name"></span>
+  </div>
+
+  <!-- Waiting state -->
+  <div id="waiting-state">
+    <div class="upcoming">
+      <div class="upcoming-label">Next Carnival</div>
+      <div class="upcoming-title">WPS Swimming Carnival 2026</div>
+      <div class="upcoming-detail">Term 1, 2026 &nbsp;·&nbsp; Altona Memorial Park Pool &nbsp;·&nbsp; Grades 3–6</div>
     </div>
-    <div id="live-results-body">
-      <div class="results-waiting">
-        <div class="wait-icon">🏊</div>
-        <p>Results will appear here live on carnival day.<br>
-        Timers tap finish on their phones — this page updates instantly.</p>
-      </div>
+    <div class="results-waiting">
+      <div class="wait-icon">🏊</div>
+      <p>House points, results and district qualifiers will appear here live on carnival day.<br>
+      Timers tap finish on their phones — this page updates instantly.</p>
     </div>
   </div>
 
-  <div class="upcoming">
-    <div class="upcoming-label">Next Carnival</div>
-    <div class="upcoming-title">WPS Swimming Carnival 2026</div>
-    <div class="upcoming-detail">Term 1, 2026 &nbsp;·&nbsp; Williamstown Surf Life Saving Club</div>
-    <div class="pool-badge">33m Pool</div>
-  </div>
+  <!-- Live carnival view -->
+  <div id="live-state" style="display:none">
 
-  <div class="g3 mb16">
-    <div class="card stat"><div class="stat-num">4</div><div class="stat-lbl">Houses</div></div>
-    <div class="card stat"><div class="stat-num">3</div><div class="stat-lbl">Age Groups</div></div>
-    <div class="card stat"><div class="stat-num">10</div><div class="stat-lbl">Events</div></div>
-  </div>
-
-  <div class="g2">
-    <div class="card">
-      <div class="section-title">Events</div>
-      <div class="event-row"><span class="event-name">33m Freestyle</span><span class="event-type swim">Swim</span></div>
-      <div class="event-row"><span class="event-name">33m Backstroke</span><span class="event-type swim">Swim</span></div>
-      <div class="event-row"><span class="event-name">33m Breaststroke</span><span class="event-type swim">Swim</span></div>
-      <div class="event-row"><span class="event-name">33m Butterfly</span><span class="event-type swim">Swim</span></div>
-      <div class="event-row"><span class="event-name">66m Freestyle</span><span class="event-type swim">Swim</span></div>
-      <div class="event-row"><span class="event-name">66m Backstroke</span><span class="event-type swim">Swim</span></div>
-      <div class="event-row"><span class="event-name">66m Breaststroke</span><span class="event-type swim">Swim</span></div>
-      <div class="event-row"><span class="event-name">66m Butterfly</span><span class="event-type swim">Swim</span></div>
-      <div class="event-row"><span class="event-name">Freestyle Relay</span><span class="event-type relay">Relay</span></div>
-      <div class="event-row"><span class="event-name">Medley Relay</span><span class="event-type relay">Relay</span></div>
+    <!-- HOUSE LEADERBOARD -->
+    <div id="house-leaderboard-wrap" style="display:none;margin-bottom:8px">
+      <div class="section-title" style="margin-bottom:12px">🏆 House Points</div>
+      <div class="house-leaderboard" id="house-leaderboard"></div>
     </div>
-    <div>
-      <div class="card mb16">
-        <div class="section-title">Houses</div>
-        <div class="house-bar"><span class="house-dot" style="background:#3B82F6;"></span><span class="house-name">Nelson</span></div>
-        <div class="house-bar"><span class="house-dot" style="background:#22C55E;"></span><span class="house-name">Gem</span></div>
-        <div class="house-bar"><span class="house-dot" style="background:#EF4444;"></span><span class="house-name">Ferguson</span></div>
-        <div class="house-bar"><span class="house-dot" style="background:#F5C518;"></span><span class="house-name">Reid</span></div>
-      </div>
+
+    <!-- TABS -->
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="switchTab('results')">Results</button>
+      <button class="tab-btn" onclick="switchTab('qualifiers')">District Qualifiers</button>
+    </div>
+
+    <!-- Results tab -->
+    <div class="tab-panel active" id="tab-results">
+      <div id="live-results-body"></div>
+    </div>
+
+    <!-- District Qualifiers tab -->
+    <div class="tab-panel" id="tab-qualifiers">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Top 2 per event auto-qualify for the Williamstown District swimming carnival.</p>
+      <div id="qualifiers-body"></div>
+    </div>
+
+  </div>
+
+  <!-- Static school info -->
+  <div id="school-info" style="margin-top:28px">
+    <div class="g3 mb16">
+      <div class="card stat"><div class="stat-num">4</div><div class="stat-lbl">Houses</div></div>
+      <div class="card stat"><div class="stat-num">3</div><div class="stat-lbl">Age Groups</div></div>
+      <div class="card stat"><div class="stat-num">8</div><div class="stat-lbl">Events</div></div>
+    </div>
+    <div class="g2">
       <div class="card">
-        <div class="section-title">Age Groups</div>
-        <div class="event-row"><span class="event-name">10 Years &amp; Below</span></div>
-        <div class="event-row"><span class="event-name">11 Years</span></div>
-        <div class="event-row"><span class="event-name">12 Years &amp; Above</span></div>
+        <div class="section-title">Events</div>
+        <div class="event-row"><span class="event-name">50m Freestyle</span><span class="event-type swim-free">Freestyle</span></div>
+        <div class="event-row"><span class="event-name">100m Freestyle</span><span class="event-type swim-free">Freestyle</span></div>
+        <div class="event-row"><span class="event-name">50m Backstroke</span><span class="event-type swim-back">Backstroke</span></div>
+        <div class="event-row"><span class="event-name">50m Breaststroke</span><span class="event-type swim-breast">Breaststroke</span></div>
+        <div class="event-row"><span class="event-name">50m Butterfly</span><span class="event-type swim-fly">Butterfly</span></div>
+        <div class="event-row"><span class="event-name">200m Individual Medley</span><span class="event-type swim-back">Medley</span></div>
+        <div class="event-row"><span class="event-name">4×50m Freestyle Relay</span><span class="event-type swim-relay">Relay</span></div>
+        <div class="event-row"><span class="event-name">4×50m Medley Relay</span><span class="event-type swim-relay">Relay</span></div>
+      </div>
+      <div>
+        <div class="card mb16">
+          <div class="section-title">Houses</div>
+          <div class="house-bar"><span class="house-dot" style="background:#3B82F6;"></span><span class="house-name">Nelson</span></div>
+          <div class="house-bar"><span class="house-dot" style="background:#22C55E;"></span><span class="house-name">Gem</span></div>
+          <div class="house-bar"><span class="house-dot" style="background:#EF4444;"></span><span class="house-name">Ferguson</span></div>
+          <div class="house-bar"><span class="house-dot" style="background:#F5C518;"></span><span class="house-name">Reid</span></div>
+        </div>
+        <div class="card">
+          <div class="section-title">Age Groups</div>
+          <div class="event-row"><span class="event-name">10 Years &amp; Below</span></div>
+          <div class="event-row"><span class="event-name">11 Years</span></div>
+          <div class="event-row"><span class="event-name">12 Years &amp; Above</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card mt20">
+      <div class="section-title">Points System</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:13px;margin-top:4px;">
+        <span>1st = <strong style="color:var(--gold);">8 pts</strong></span>
+        <span>2nd = <strong style="color:var(--gold);">6 pts</strong></span>
+        <span>3rd = <strong style="color:var(--gold);">4 pts</strong></span>
+        <span>4th = <strong style="color:var(--gold);">3 pts</strong></span>
+        <span>5th = <strong style="color:var(--gold);">2 pts</strong></span>
+        <span>6th = <strong style="color:var(--gold);">1 pt</strong></span>
       </div>
     </div>
   </div>
 
-  <div class="card mt20">
-    <div class="section-title">Points System</div>
-    <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:13px;margin-top:4px;">
-      <span>1st = <strong style="color:#63B3ED;">10 pts</strong></span>
-      <span>2nd = <strong style="color:#63B3ED;">8 pts</strong></span>
-      <span>3rd = <strong style="color:#63B3ED;">6 pts</strong></span>
-      <span>4th = <strong style="color:#63B3ED;">5 pts</strong></span>
-      <span>5th = <strong style="color:#63B3ED;">4 pts</strong></span>
-      <span>6th = <strong style="color:#63B3ED;">3 pts</strong></span>
-      <span>7th = <strong style="color:#63B3ED;">2 pts</strong></span>
-      <span>8th = <strong style="color:#63B3ED;">1 pt</strong></span>
-    </div>
-    <div style="margin-top:10px;font-size:12px;color:var(--muted);">Top 2 in each event qualify for Division carnival. Max 2 individual events at Division level.</div>
-  </div>
-
-</div>
+</div><!-- /content -->
 
 <footer>
   <a href="https://sportcarnival.com.au">sportcarnival.com.au</a> &nbsp;·&nbsp;
@@ -190,7 +233,6 @@ footer a{color:#63B3ED;text-decoration:none;}
   <a href="https://schoolsportportal.com.au/hobsonsbaydivision">Hobsons Bay Division</a>
 </footer>
 
-<!-- Firebase: read-only live results -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
@@ -202,92 +244,208 @@ footer a{color:#63B3ED;text-decoration:none;}
     projectId: "willy-district-sport"
   };
   const SCHOOL_MATCH = /williamstown/i;
-  const SPORT_MATCH  = /swim/i;
+  const SPORT_MATCH  = /swimming|swim/i;
+
+  const PLACE_PTS = {1:8, 2:6, 3:4, 4:3, 5:2, 6:1};
+  const DISTRICT_QUALIFY = 2;
+
+  const HOUSE_COLOURS = {
+    Nelson:   '#3B82F6', Gem: '#22C55E',
+    Ferguson: '#EF4444', Reid: '#F5C518'
+  };
 
   try { firebase.initializeApp(FB_CONFIG); } catch(e){}
-
   const db = firebase.database();
-  const dot  = document.getElementById('live-dot');
-  const badge = document.getElementById('live-badge');
-  const nameEl = document.getElementById('live-carnival-name');
-  const body  = document.getElementById('live-results-body');
+
+  const dotEl     = document.getElementById('live-dot');
+  const badgeEl   = document.getElementById('live-badge');
+  const nameEl    = document.getElementById('live-carnival-name');
+  const waitEl    = document.getElementById('waiting-state');
+  const liveEl    = document.getElementById('live-state');
+  const resultsEl = document.getElementById('live-results-body');
+  const qualsEl   = document.getElementById('qualifiers-body');
+  const lbWrap    = document.getElementById('house-leaderboard-wrap');
+  const lbEl      = document.getElementById('house-leaderboard');
 
   db.ref('carnivalResults').on('value', function(snap) {
-    const all = snap.val();
+    var all = snap.val();
     if (!all) { renderWaiting(); return; }
-    const matching = [];
+
+    var matching = [];
     Object.entries(all).forEach(function([code, data]) {
       if (!data || !data.meta) return;
       if (!SCHOOL_MATCH.test(data.meta.school || '')) return;
-      if ((data.meta.sport) && !SPORT_MATCH.test(data.meta.sport)) return;
+      var sport = data.meta.sport || '';
+      if (sport && !SPORT_MATCH.test(sport)) return;
       matching.push({ code: code, meta: data.meta, results: data.results || {} });
     });
+
     if (!matching.length) { renderWaiting(); return; }
-    matching.sort(function(a, b) { return (b.meta.createdAt||0)-(a.meta.createdAt||0); });
-    renderResults(matching[0]);
-  }, function() { renderWaiting(); });
+    matching.sort(function(a,b){ return (b.meta.createdAt||0)-(a.meta.createdAt||0); });
 
-  function renderWaiting() {
-    dot.className = 'live-dot inactive'; badge.className = 'live-badge inactive';
-    badge.textContent = 'Results'; nameEl.textContent = '';
-    body.innerHTML = '<div class="results-waiting"><div class="wait-icon">🏊</div>' +
-      '<p>Results will appear here live on carnival day.<br>' +
-      'Timers tap finish on their phones — this page updates instantly.</p></div>';
-  }
+    var carnival = matching[0];
+    var resultsObj = carnival.results;
+    var keys = Object.keys(resultsObj);
 
-  function fmtTime(ms) {
-    if (!ms && ms !== 0) return '—';
-    var s = ms / 1000;
-    if (s >= 60) { var m=Math.floor(s/60),sec=(s%60).toFixed(2); return m+':'+(sec<10?'0':'')+sec; }
-    return s.toFixed(2)+'s';
-  }
-
-  function placeClass(n) {
-    if (n===1) return 'place-cell p1'; if (n===2) return 'place-cell p2';
-    if (n===3) return 'place-cell p3'; return 'place-cell';
-  }
-
-  function renderResults(carnival) {
-    dot.className = 'live-dot'; badge.className = 'live-badge';
-    badge.textContent = 'Live Results';
-    nameEl.textContent = carnival.meta.name || carnival.meta.carnivalName || '';
-    var resultsObj = carnival.results, keys = Object.keys(resultsObj);
     if (!keys.length) {
-      body.innerHTML = '<div class="results-waiting"><div class="wait-icon">⏱️</div>' +
-        '<p>Carnival connected — results will appear as each event is published.</p></div>';
+      dotEl.className='live-dot'; badgeEl.className='live-badge';
+      badgeEl.textContent='Live'; nameEl.textContent=carnival.meta.name||'';
+      waitEl.style.display='none'; liveEl.style.display='block';
+      lbWrap.style.display='none';
+      resultsEl.innerHTML='<div class="results-waiting"><div class="wait-icon">⏱️</div><p>Carnival connected — results appear as each event is published.</p></div>';
+      qualsEl.innerHTML='<div class="results-waiting"><p>Qualifiers appear once results are published.</p></div>';
       return;
     }
+
+    dotEl.className='live-dot'; badgeEl.className='live-badge';
+    badgeEl.textContent='Live Results';
+    nameEl.textContent=carnival.meta.name||'';
+    waitEl.style.display='none'; liveEl.style.display='block';
+
     keys.sort(function(a,b){ return (resultsObj[b].publishedAt||0)-(resultsObj[a].publishedAt||0); });
+
+    renderHousePoints(resultsObj, keys);
+    renderResults(resultsObj, keys);
+    renderQualifiers(resultsObj, keys);
+  }, function(){ renderWaiting(); });
+
+  // ── House Points ──────────────────────────────────────────────────────────────
+  function renderHousePoints(resultsObj, keys) {
+    var totals = {};
+    keys.forEach(function(key) {
+      var r = resultsObj[key];
+      var places = getPlaces(r);
+      places.forEach(function(p) {
+        if (p.dq) return;
+        var house = p.house || '';
+        if (!house) return;
+        var pts = PLACE_PTS[p.place] || 0;
+        totals[house] = (totals[house] || 0) + pts;
+      });
+    });
+
+    var houses = Object.keys(totals);
+    if (!houses.length) { lbWrap.style.display='none'; return; }
+    houses.sort(function(a,b){ return totals[b]-totals[a]; });
+    lbWrap.style.display='block';
+
+    lbEl.innerHTML = houses.map(function(h, i) {
+      var col = HOUSE_COLOURS[h] || '#888';
+      var isLeader = i===0;
+      return '<div class="house-card'+(isLeader?' leader':'')+'" style="background:'+col+'22;border-color:'+(isLeader?'var(--gold)':col+'44')+'">'
+        +'<div class="h-rank">'+(i===0?'👑':('#'+(i+1)))+'</div>'
+        +'<div class="h-pts" style="color:'+col+'">'+totals[h]+'</div>'
+        +'<div class="h-name" style="color:'+col+'">'+escHtml(h)+'</div>'
+        +'</div>';
+    }).join('');
+  }
+
+  // ── Results ───────────────────────────────────────────────────────────────────
+  function renderResults(resultsObj, keys) {
     var html = '';
     keys.forEach(function(key) {
       var r = resultsObj[key];
+      var places = getPlaces(r);
       html += '<div class="result-block"><div class="result-event">'+escHtml(r.event||key);
       if (r.age) html += ' &nbsp;·&nbsp; '+escHtml(String(r.age));
       if (r.gender) html += ' '+escHtml(r.gender);
-      html += '</div><table class="result-table"><thead><tr><th>#</th><th>Athlete</th><th>Time</th></tr></thead><tbody>';
-      var places = [];
-      if (r.type==='lane'&&r.results) places=Array.isArray(r.results)?r.results:Object.values(r.results);
-      else if (r.places) places=Array.isArray(r.places)?r.places:Object.values(r.places);
+      html += '</div><table class="result-table"><thead><tr><th>#</th><th>Athlete</th><th>House</th><th>Time</th></tr></thead><tbody>';
       if (places.length) {
-        places.forEach(function(p,i){
-          var isDQ=p.dq||false, placeNum=isDQ?'DQ':(p.place||(i+1));
-          html += '<tr><td class="'+(isDQ?'dq-cell':placeClass(typeof placeNum==='number'?placeNum:99))+'">'+placeNum+'</td>'+
-            '<td>'+escHtml(p.name||p.lane||('Lane '+(i+1)))+'</td>'+
-            '<td class="time-cell">'+(isDQ?'<span class="dq-cell">DQ</span>':fmtTime(p.elapsedMs))+'</td></tr>';
+        places.forEach(function(p, i) {
+          var isDQ = p.dq||false;
+          var placeNum = isDQ ? 'DQ' : (p.place||(i+1));
+          var house = p.house||'';
+          var hcol = HOUSE_COLOURS[house]||'#888';
+          html += '<tr>'
+            +'<td class="'+(isDQ?'dq-cell':placeClass(typeof placeNum==='number'?placeNum:99))+'">'+placeNum+'</td>'
+            +'<td>'+escHtml(p.name||('Lane '+(i+1)))+'</td>'
+            +'<td>'+(house?'<span class="house-pill" style="background:'+hcol+'22;color:'+hcol+'">'+escHtml(house)+'</span>':'<span style="color:var(--muted)">—</span>')+'</td>'
+            +'<td class="time-cell">'+(isDQ?'<span class="dq-cell">DQ</span>':fmtTime(p.elapsedMs))+'</td>'
+            +'</tr>';
         });
       } else {
-        html += '<tr><td colspan="3" style="color:var(--muted);font-size:12px;padding:10px 8px;">No places recorded</td></tr>';
+        html += '<tr><td colspan="4" style="color:var(--muted);font-size:12px;padding:10px 8px;">No places recorded</td></tr>';
       }
       html += '</tbody></table></div>';
     });
-    body.innerHTML = html;
+    resultsEl.innerHTML = html || '<div class="results-waiting"><p>No results yet.</p></div>';
   }
 
-  function escHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  // ── District Qualifiers ───────────────────────────────────────────────────────
+  function renderQualifiers(resultsObj, keys) {
+    var eventMap = {};
+    keys.forEach(function(key) {
+      var r = resultsObj[key];
+      var baseEvent = (r.event||key).replace(/\s*—\s*(Heat \d+|Final|Round \d+)$/i,'').trim();
+      var groupKey = (r.age||'')+'|'+(r.gender||'')+'|'+baseEvent;
+      if (!eventMap[groupKey]) eventMap[groupKey] = { event:r.event||key, age:r.age||'', gender:r.gender||'', places:[] };
+      var existing = eventMap[groupKey];
+      getPlaces(r).forEach(function(p) {
+        if (p.dq) return;
+        var found = existing.places.find(function(x){ return x.name===p.name; });
+        if (!found) { existing.places.push({name:p.name, house:p.house||'', elapsedMs:p.elapsedMs}); }
+        else if (p.elapsedMs && p.elapsedMs < found.elapsedMs) { found.elapsedMs=p.elapsedMs; found.house=p.house||found.house; }
+      });
+    });
+
+    var groups = Object.values(eventMap);
+    if (!groups.length) { qualsEl.innerHTML='<div class="results-waiting"><p>Qualifiers appear once results are published.</p></div>'; return; }
+
+    var html = '';
+    groups.forEach(function(g) {
+      var sorted = g.places.slice().sort(function(a,b){ return (a.elapsedMs||99999)-(b.elapsedMs||99999); });
+      var qualifiers = sorted.slice(0, DISTRICT_QUALIFY);
+      if (!qualifiers.length) return;
+
+      html += '<div class="qual-block"><div class="qual-event">'+escHtml(g.event);
+      if (g.age) html += ' &nbsp;·&nbsp; '+escHtml(String(g.age));
+      if (g.gender) html += ' '+escHtml(g.gender);
+      html += ' &nbsp;<span style="color:#A855F7;font-size:9px">→ DISTRICT</span></div>';
+
+      qualifiers.forEach(function(p, i) {
+        var house = p.house||'';
+        var hcol = HOUSE_COLOURS[house]||'#888';
+        html += '<div class="qual-row">'
+          +'<div class="qual-place">'+(i+1)+'</div>'
+          +'<div>'+escHtml(p.name)+(house?' <span class="house-pill" style="background:'+hcol+'22;color:'+hcol+'">'+escHtml(house)+'</span>':'')+'</div>'
+          +'<div class="qual-time">'+fmtTime(p.elapsedMs)+'</div>'
+          +'</div>';
+      });
+      html += '</div>';
+    });
+    qualsEl.innerHTML = html || '<div class="results-waiting"><p>No qualifiers yet.</p></div>';
   }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────────
+  function getPlaces(r) {
+    if (!r) return [];
+    if (r.results) return Array.isArray(r.results) ? r.results : Object.values(r.results);
+    if (r.places)  return Array.isArray(r.places)  ? r.places  : Object.values(r.places);
+    return [];
+  }
+
+  function renderWaiting() {
+    dotEl.className='live-dot inactive'; badgeEl.className='live-badge inactive';
+    badgeEl.textContent='Not live'; nameEl.textContent='';
+    waitEl.style.display=''; liveEl.style.display='none';
+  }
+
+  function fmtTime(ms) {
+    if (!ms && ms!==0) return '—';
+    var s=ms/1000;
+    if (s>=60){ var m=Math.floor(s/60),sec=(s%60).toFixed(2); return m+':'+(sec<10?'0':'')+sec; }
+    return s.toFixed(2)+'s';
+  }
+  function placeClass(n){ return n===1?'place-cell p1':n===2?'place-cell p2':n===3?'place-cell p3':'place-cell'; }
+  function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  window.switchTab = function(tab) {
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelector('.tab-btn[onclick*="'+tab+'"]').classList.add('active');
+    document.getElementById('tab-'+tab).classList.add('active');
+  };
 })();
 </script>
-
 </body>
 </html>
