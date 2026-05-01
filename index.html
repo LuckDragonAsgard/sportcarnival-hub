@@ -1559,6 +1559,17 @@ async function adminPublish() {
     publishedAt:firebase.database.ServerValue.TIMESTAMP
   });
   await cRef('race/current').update({state:'done'});
+  // Falkor auto-AI: race summary + commentary (fire-and-forget)
+  (async()=>{
+    try{
+      const _r=results.filter(r=>r.timeMs).map(r=>({lane:r.lane,athlete:r.name||'Lane '+r.lane,school:'',time:+(r.timeMs/1000).toFixed(2)}));
+      if(_r.length>=2){
+        const _s=await fetch('https://falkor-sportcarnival-ai.luckdragon.io/result-summary',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:raceState.event,age:raceState.age,gender:raceState.gender,results:_r})});
+        if(_s.ok){const{summary}=await _s.json();if(summary)await cRef('results/'+key+'/ai_summary').set({text:summary,ts:Date.now()});}
+        const _c=await fetch('https://falkor-sportcarnival-ai.luckdragon.io/result-summary',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:raceState.event+' '+raceState.age+' '+raceState.gender,results:_r.slice(0,3).map((r,i)=>({place:i+1,...r}))})});
+      }
+    }catch(_e){console.warn('Falkor AI:',_e);}
+  })();
   toast('📋 Results published!');
 }
 
@@ -2049,6 +2060,7 @@ function renderAllResults(results) {
             <div style="flex:1;font-weight:${p.place<=3?700:400}">${p.name||'—'}</div>
             <div class="font-mono text-sm">${fmtSec(p.timeMs)}</div>
           </div>`).join('')}
+        ${r.ai_summary ? `<div style="margin-top:8px;padding:8px 10px;background:rgba(99,102,241,.1);border-radius:8px;font-size:.82rem;font-style:italic;color:var(--text-color,#e2e8f0)">🤖 ${r.ai_summary.text}</div>` : ''}
       </div>`;
     }
   }).join('');
