@@ -66,23 +66,36 @@ async function _innerFetch(req, env) {
   if (p === '/privacy') return new Response(PRIVACY_HTML, {status:200,headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'public, max-age=3600'}});
   if (p === '/terms')   return new Response(TERMS_HTML,   {status:200,headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'public, max-age=3600'}});
 
-  // Google Sheets API endpoints (used by /wd26 and any future district)
-  if (p === '/api/draw' || p === '/api/results' || p === '/api/sheet') {
-    const sheetId = env.GSHEET_ID || url.searchParams.get('id') || '';
-    if (!sheetId) return apiJson({ error: 'No sheet configured. Set GSHEET_ID secret on sportcarnival-hub worker.' }, 503);
-    const sheetName = url.searchParams.get('sheet') || (p === '/api/results' ? 'Results' : 'Draw');
+  // Carnival data endpoints — back by carnival-results D1 (no Sheet/Firebase dependency)
+  if (p === '/api/results' || p === '/api/draw') {
+    const code = (url.searchParams.get('carnival') || url.searchParams.get('code') || '').toUpperCase();
+    if (!code) return apiJson({ error: 'Missing ?carnival=CODE param' }, 400);
     try {
-      const data = await fetchSheet(sheetId, sheetName);
-      if (!data) return apiJson({ error: 'Could not fetch sheet. Ensure it is published to the web (File → Share → Publish).' }, 502);
-      const cacheHeaders = { ...CORS, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=120' };
-      return new Response(JSON.stringify({ ok: true, sheet: sheetName, ...data, fetched_at: new Date().toISOString() }), { headers: cacheHeaders });
+      const r = await fetch(`https://carnival-results.pgallivan.workers.dev/api/results/${encodeURIComponent(code)}`, { cf: { cacheTtl: 30 } });
+      if (r.status === 404) return apiJson({ ok: true, code, status: 'pending', message: 'No results published yet for this carnival', races: [] }, 200);
+      const data = await r.json();
+      const headers = { ...CORS, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=30' };
+      return new Response(JSON.stringify({ ok: true, source: 'carnival-results-d1', ...data, fetched_at: new Date().toISOString() }), { headers });
     } catch(e) {
-      return apiJson({ error: e.message }, 500);
+      return apiJson({ error: e.message, hint: 'carnival-results D1 worker may be down' }, 502);
     }
+  }
+  if (p === '/api/list') {
+    const school = url.searchParams.get('school') || '';
+    const sport  = url.searchParams.get('sport') || '';
+    const qs = new URLSearchParams({ ...(school && {school}), ...(sport && {sport}) });
+    try {
+      const r = await fetch(`https://carnival-results.pgallivan.workers.dev/api/list?${qs}`);
+      const data = await r.json();
+      return new Response(JSON.stringify(data), { headers: { ...CORS, 'Content-Type':'application/json','Cache-Control':'public, max-age=60' } });
+    } catch(e) { return apiJson({ error: e.message }, 502); }
+  }
+  if (p === '/api/sheet') {
+    return apiJson({ deprecated: true, message: 'Google Sheet integration removed. Use /api/results?carnival=CODE backed by carnival-results D1.' }, 410);
   }
 
   if (p === '/api/status') {
-    return apiJson({ ok: true, sheet_configured: !!(env.GSHEET_ID), version: '3.1.1', routes: ['/','/wd26','/williamstown','/draw','/privacy','/terms','/williamstownps/crosscountry','/williamstownps/athletics','/williamstownps/swimming','/demo-school/crosscountry','/demo-school/athletics','/demo-school/swimming'] });
+    return apiJson({ ok: true, backend: 'carnival-results-d1', version: '3.2.0', routes: ['/','/wd26','/williamstown','/draw','/privacy','/terms','/api/list','/williamstownps/crosscountry','/williamstownps/athletics','/williamstownps/swimming','/demo-school/crosscountry','/demo-school/athletics','/demo-school/swimming'] });
   }
 
   // /wd26 (and aliases) → real Williamstown District XC 2026 page
@@ -90,7 +103,7 @@ async function _innerFetch(req, env) {
     return new Response(dec(WD26_H), { headers: { 'Content-Type': 'text/html;charset=utf-8', 'Cache-Control': 'no-cache', 'X-Robots-Tag': 'noindex' } });
 
   // /williamstownps/{event} → real WPS sub-pages
-  if (p === '/williamstownps/crosscountry' || p === '/williamstownps/crosscountry.html')
+  if (p === '/api/list','/williamstownps/crosscountry' || p === '/williamstownps/crosscountry.html')
     return new Response(dec(WPS_CROSSCOUNTRY_H), { headers: { 'Content-Type': 'text/html;charset=utf-8', 'Cache-Control': 'no-cache', 'X-Robots-Tag': 'noindex' } });
   if (p === '/williamstownps/athletics' || p === '/williamstownps/athletics.html')
     return new Response(dec(WPS_ATHLETICS_H), { headers: { 'Content-Type': 'text/html;charset=utf-8', 'Cache-Control': 'no-cache', 'X-Robots-Tag': 'noindex' } });
