@@ -95,7 +95,7 @@ async function _innerFetch(req, env) {
   }
 
   if (p === '/api/status') {
-    return apiJson({ ok: true, backend: 'carnival-results-d1', version: '3.2.0', routes: ['/','/wd26','/williamstown','/draw','/privacy','/terms','/api/list','/williamstownps/crosscountry','/williamstownps/athletics','/williamstownps/swimming','/demo-school/crosscountry','/demo-school/athletics','/demo-school/swimming'] });
+    return apiJson({ ok: true, backend: 'carnival-results-d1', version: '3.2.1', routes: ['/','/wd26','/williamstown','/draw','/privacy','/terms','/api/list','/williamstownps/crosscountry','/williamstownps/athletics','/williamstownps/swimming','/demo-school/crosscountry','/demo-school/athletics','/demo-school/swimming'] });
   }
 
   // /wd26 (and aliases) → real Williamstown District XC 2026 page
@@ -103,7 +103,7 @@ async function _innerFetch(req, env) {
     return new Response(dec(WD26_H), { headers: { 'Content-Type': 'text/html;charset=utf-8', 'Cache-Control': 'no-cache', 'X-Robots-Tag': 'noindex' } });
 
   // /williamstownps/{event} → real WPS sub-pages
-  if (p === '/api/list','/williamstownps/crosscountry' || p === '/williamstownps/crosscountry.html')
+  if (p === '/williamstownps/crosscountry' || p === '/williamstownps/crosscountry.html')
     return new Response(dec(WPS_CROSSCOUNTRY_H), { headers: { 'Content-Type': 'text/html;charset=utf-8', 'Cache-Control': 'no-cache', 'X-Robots-Tag': 'noindex' } });
   if (p === '/williamstownps/athletics' || p === '/williamstownps/athletics.html')
     return new Response(dec(WPS_ATHLETICS_H), { headers: { 'Content-Type': 'text/html;charset=utf-8', 'Cache-Control': 'no-cache', 'X-Robots-Tag': 'noindex' } });
